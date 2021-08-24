@@ -1,4 +1,5 @@
 using AppLanches.Context;
+using AppLanches.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +28,9 @@ namespace AppLanches
         {
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllersWithViews();
+
+            services.AddTransient<ICategoriaRepository, CategoriaRepository>();
+            services.AddTransient<ILancheRepository, LancheRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
