@@ -17,9 +17,9 @@ namespace AppLanches.Models
         [StringLength(250)]
         public string DescricaoDetalhada { get; set; }
         public decimal Preco { get; set; }
-        [StringLength(200)]
+        [StringLength(250)]
         public string ImagemUrl { get; set; }
-        [StringLength(200)]
+        [StringLength(250)]
         public string ImagemThumbnailUrl { get; set; }
         public bool IsLanchePreferido { get; set; }
         public bool EmEstoque { get; set; }
