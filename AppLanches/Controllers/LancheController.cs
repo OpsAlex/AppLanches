@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using AppLanches.ViewModels;
 
 namespace AppLanches.Controllers
 {
@@ -26,8 +27,12 @@ namespace AppLanches.Controllers
             ViewBag.Lanche = "Lanches";
             ViewData["Categoria"] = "Categoria";
 
-            var lanches = _lancheRepository.Lanches;
-            return View(lanches);
+            // var lanches = _lancheRepository.Lanches;
+            // return View(lanches);
+            var lanchelistViewModel = new LancheListViewModel();
+            lanchelistViewModel.Lanches = _lancheRepository.Lanches;
+            lanchelistViewModel.CategoriaAtual = "Categoria Atual";
+            return View(lanchelistViewModel);
         }
     }
 }
