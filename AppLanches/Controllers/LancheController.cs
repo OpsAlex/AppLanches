@@ -1,13 +1,10 @@
 using AppLanches.Models;
 using AppLanches.Repository;
+using AppLanches.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using AppLanches.ViewModels;
 
 namespace AppLanches.Controllers
 {
@@ -66,6 +63,22 @@ namespace AppLanches.Controllers
                 return View("~/Views/Error/Error.cshtml");
             }
             return View(lanche);
+        }
+        public IActionResult Search(string searchstring)
+        {
+            string _searchString = searchstring;
+            IEnumerable<Lanche> lanches;
+            string categoriaAtual = string.Empty;
+
+            if (string.IsNullOrEmpty(_searchString))
+            {
+                lanches = _lancheRepository.Lanches.OrderBy(p => p.LancheId);
+            }
+            else
+            {
+                lanches = _lancheRepository.Lanches.Where(p => p.Nome.ToLower().Contains(_searchString.ToLower()));
+            }
+            return View("~/Views/Lanche/List.cshtml", new LancheListViewModel { Lanches=lanches, CategoriaAtual="Todos os Lanches"});
         }
     }
 }
