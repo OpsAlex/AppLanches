@@ -52,5 +52,55 @@ namespace AppLanches.Controllers
             ModelState.AddModelError("", "Usuário/Senha inválidos ou não localizados!!");
             return View(loginVM);
         }
+
+        // Adicionando Usuario no Banco
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        //Filtro para evitar ataques CSRF
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(LoginViewModel registroVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser() { UserName = registroVM.UserName };
+                var result = await _userManager.CreateAsync(user, registroVM.Password);
+
+                if (result.Succeeded)
+                {
+                    //// Adiciona o usuário padrão ao perfil Member
+                    await _userManager.AddToRoleAsync(user, "Member");
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    return RedirectToAction("LoggedIn", "Account");
+                }
+            }
+            return View(registroVM);
+        }
+
+        public ViewResult LoggedIn() => View();
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            if (HttpContext.Request.Cookies.Count > 0)
+            {
+                var siteCookies = HttpContext.Request.Cookies
+                                  .Where(c => c.Key.Contains(".AspNetCore.")
+                                  || c.Key.Contains("Microsoft.Authentication"));
+
+                foreach (var cookie in siteCookies)
+                {
+                    Response.Cookies.Delete(cookie.Key);
+                }
+            }
+            await _signInManager.SignOutAsync();
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
