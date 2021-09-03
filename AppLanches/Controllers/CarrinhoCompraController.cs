@@ -3,6 +3,8 @@ using AppLanches.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using AppLanches.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+
 namespace AppLanches.Controllers
 {
     public class CarrinhoCompraController : Controller
@@ -26,9 +28,9 @@ namespace AppLanches.Controllers
                 CarrinhoCompra = _carrinhoCompra,
                 CarrinhoCompraTotal = _carrinhoCompra.GetCarrinhoCompraTotal()
             };
-        return View(carrinhoCompraViewModel);
+            return View(carrinhoCompraViewModel);
         }
-
+        [Authorize]
         public RedirectToActionResult AdicionarItemNoCarrinhoCompra(int lancheId)
         {
             var lancheSelecionado = _lancheRepository.Lanches.FirstOrDefault(p => p.LancheId == lancheId);
@@ -39,7 +41,7 @@ namespace AppLanches.Controllers
             }
             return RedirectToAction("Index");
         }
-
+        [Authorize]
         public RedirectToActionResult RemoverItemNoCarrinhoCompra(int lancheId)
         {
             var lancheSelecionado = _lancheRepository.Lanches.FirstOrDefault(p => p.LancheId == lancheId);
