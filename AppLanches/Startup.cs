@@ -35,6 +35,10 @@ namespace AppLanches
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+            // Configurando para acesso negado na area de admin
+            services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Home/AccessDenied");
+
+
             services.AddTransient<ICategoriaRepository, CategoriaRepository>();
             services.AddTransient<ILancheRepository, LancheRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

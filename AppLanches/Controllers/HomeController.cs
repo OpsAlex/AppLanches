@@ -37,5 +37,10 @@ namespace AppLanches.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public ViewResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
