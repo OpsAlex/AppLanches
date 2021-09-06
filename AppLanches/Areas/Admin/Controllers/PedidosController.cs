@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AppLanches.Context;
 using AppLanches.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AppLanches.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class PedidosController : Controller
     {
         private readonly AppDbContext _context;
