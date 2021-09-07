@@ -65,15 +65,14 @@ namespace AppLanches.Controllers
             return View(pedido);
         }
 
-        /*public IActionResult CheckoutCompleto()
-        {
-            ViewBag.Cliente = TempData["Cliente"];
-            ViewBag.DataPedido = TempData["DataPedido"];
-            ViewBag.NumeroPedido = TempData["NumeroPedido"];
-            ViewBag.TotalPedido = TempData["TotalPedido"];
-            ViewBag.CheckoutCompletoMensagem = "Obrigado pelo seu pedido :) ";
-            return View();
-        }
-        */
+        //public IActionResult CheckoutCompleto()
+        //{
+        //    ViewBag.Cliente = TempData["Cliente"];
+        //    ViewBag.DataPedido = TempData["DataPedido"];
+        //    ViewBag.NumeroPedido = TempData["NumeroPedido"];
+        //    ViewBag.TotalPedido = TempData["TotalPedido"];
+        //    ViewBag.CheckoutCompletoMensagem = "Obrigado pelo seu pedido :) ";
+        //    return View();
+        //}
     }
 }
