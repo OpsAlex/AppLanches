@@ -49,6 +49,22 @@ namespace AppLanches
             services.AddMemoryCache();
             services.AddSession();
 
+            //Configurando para Poder receber as Imagens
+
+            services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                 .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Home/AccessDenied");
+
+            services.Configure<ConfigurationImagens>(Configuration.GetSection("ConfigurationPastaImagens"));
+
+
+
+
             services.AddPaging(options => {
                 options.ViewName = "Bootstrap4";
                 options.PageParameterName = "pageindex";
