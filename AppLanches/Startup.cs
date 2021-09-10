@@ -1,3 +1,4 @@
+using AppLanches.Areas.Admin.Servicos;
 using AppLanches.Context;
 using AppLanches.Models;
 using AppLanches.Repository;
@@ -35,6 +36,18 @@ namespace AppLanches
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+            services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Home/AccessDenied");
+
+            services.Configure<ConfigurationImagens>(Configuration.GetSection("ConfigurationPastaImagens"));
+
+            //fornece uma instancia de HttpContextAcessor
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<ILancheRepository, LancheRepository>();
+            services.AddTransient<ICategoriaRepository, CategoriaRepository>();
+            services.AddTransient<IPedidoRepository, PedidoRepository>();
+
+            services.AddScoped<RelatorioVendasService>();
 
             // Configurando para acesso negado na area de admin
             services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Home/AccessDenied");
@@ -45,30 +58,15 @@ namespace AppLanches
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped(cp => CarrinhoCompra.GetCarrinho(cp));
-
-            services.AddMemoryCache();
-            services.AddSession();
-
-            //Configurando para Poder receber as Imagens
-
-            services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                 .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Home/AccessDenied");
-
-            services.Configure<ConfigurationImagens>(Configuration.GetSection("ConfigurationPastaImagens"));
-
-
-
-
             services.AddPaging(options => {
                 options.ViewName = "Bootstrap4";
                 options.PageParameterName = "pageindex";
             });
+
+            //configura o uso da Sessão
+            services.AddMemoryCache();
+            services.AddSession();
+
 
         }
 
