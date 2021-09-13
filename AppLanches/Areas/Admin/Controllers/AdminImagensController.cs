@@ -45,7 +45,8 @@ namespace AppLanches.Areas.Admin.Controllers
             long size = files.Sum(files => files.Length);
 
             var fileParthsName = new List<string>();
-            
+
+            //CaminhoCompleto das imagens no servidor
             var filePath = Path.Combine(_hostingEnvironment.WebRootPath, _myConfig.NomePastaImagensProdutos);
 
             foreach (var formFile in files)
@@ -66,6 +67,44 @@ namespace AppLanches.Areas.Admin.Controllers
             ViewBag.Arquivos = fileParthsName;
 
             return View(ViewData);
+        }
+        public IActionResult GetImagens()
+        {
+            FileManagerModel model = new FileManagerModel();
+
+            //CaminhoCompleto das imagens no servidor
+            var userImagesPath = Path.Combine(_hostingEnvironment.WebRootPath, _myConfig.NomePastaImagensProdutos);
+
+            //Criando uma estancia e iniciando o diretorio
+            DirectoryInfo dir = new DirectoryInfo(userImagesPath);
+
+            FileInfo[] files = dir.GetFiles();
+
+            model.PathImagesProduto = _myConfig.NomePastaImagensProdutos;
+
+            if (files.Length == 0)
+            {
+                ViewData["Erro"] = $"Nenhum arquivo encontrado na pasta {userImagesPath}";
+            }
+
+            model.Files = files;
+
+            return View(model);
+        }
+        public IActionResult DeleteFile(string fname)
+        {
+            //montando o caminho completo do arquivo
+            string _imagemDeleta = Path.Combine(_hostingEnvironment.WebRootPath, _myConfig.NomePastaImagensProdutos + "\\", fname);
+
+            //validando 
+            if ((System.IO.File.Exists(_imagemDeleta)))
+            {
+                //deletando
+                System.IO.File.Delete(_imagemDeleta);
+
+                ViewData["Deletado"] = $"Arquivo(s) {_imagemDeleta} deletado com sucesso";
+            }
+            return View("index");
         }
     }
 }
