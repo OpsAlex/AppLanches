@@ -48,7 +48,7 @@ namespace AppLanches
             services.AddTransient<IPedidoRepository, PedidoRepository>();
 
             services.AddScoped<RelatorioVendasService>();
-
+            services.AddScoped<GraficoVendasService>(); 
             // Configurando para acesso negado na area de admin
             services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "/Home/AccessDenied");
 

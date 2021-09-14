@@ -1,17 +1,49 @@
-using System.Runtime.InteropServices;
+using AppLanches.Context;
+using AppLanches.Models;
+using AppLanches.Repository;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-// Nos projetos no estilo SDK como este, vários atributos de assembly que sempre eram
-// definidos nesse arquivo agora são adicionados automaticamente durante o build e
-// populados com os valores definidos nas propriedades do projeto. Para obter detalhes
-// de quais atributos são incluídos e como personalizar esse processo, confira: https://aka.ms/assembly-info-properties
+namespace AppLanches.Areas.Admin.Servicos
+{
+    public class GraficoVendasService
+    {
+        private readonly AppDbContext context;
 
+        public GraficoVendasService(AppDbContext context)
+        {
+            this.context = context;
+        }
 
-// A definição de ComVisible como false torna os tipos neste assembly invisíveis para
-// os componentes do COM. Se for necessário acessar um tipo do COM neste assembly,
-// defina o atributo ComVisible como true nesse tipo.
+        public List<LancheGrafico> GetVendasLanches(int dias=360)
+        {
+            var data = DateTime.Now.AddDays(-dias);
+            // realizando o relacionamento entre as tabelas, fazendo as comparações,
+            // agrupando e somando os dados para retornar pro grafico...
+            var lanches = (from pd in context.PedidoDetalhes
+                           join l in context.Lanches on pd.LancheId equals l.LancheId
+                           where pd.Pedido.PedidoEnviado >= data
+                           group pd by new { pd.LancheId, l.Nome, pd.Quantidade }
+                           into g
+                           select new { LancheNome = g.Key.Nome, LanchesQuantidade = g.Sum(q=> q.Quantidade), 
+                               LanchesValorTotal = g.Sum(a => a.Preco * a.Quantidade)
+                           });
 
-[assembly: ComVisible(false)]
-
-// O GUID a seguir será destinado à ID de typelib se este projeto for exposto ao COM.
-
-[assembly: Guid("302f415a-d36f-4823-a818-a6e4e94fdb58")]
+            //Realizando a conversão para a lista LancheGrafico
+            var lista = new List<LancheGrafico>();
+            foreach (var item in lanches)
+            {
+                // criando as instancias para incluir na lista
+                var lanche = new LancheGrafico();
+                lanche.LancheNome = item.LancheNome;
+                lanche.LanchesQuantidade = item.LanchesQuantidade;
+                lanche.LanchesValorTotal = item.LanchesValorTotal;
+                lista.Add(lanche);
+            }
+            return
+        }
+    }
+}
