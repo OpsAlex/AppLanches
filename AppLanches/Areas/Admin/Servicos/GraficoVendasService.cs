@@ -43,7 +43,7 @@ namespace AppLanches.Areas.Admin.Servicos
                 lanche.LanchesValorTotal = item.LanchesValorTotal;
                 lista.Add(lanche);
             }
-            return
+            return (lista);
         }
     }
 }
