@@ -26,7 +26,7 @@ namespace AppLanches.Areas.Admin.Servicos
             var lanches = (from pd in context.PedidoDetalhes
                            join l in context.Lanches on pd.LancheId equals l.LancheId
                            where pd.Pedido.PedidoEnviado >= data
-                           group pd by new { pd.LancheId, l.Nome, pd.Quantidade }
+                           group pd by new { pd.LancheId, l.Nome }
                            into g
                            select new { LancheNome = g.Key.Nome, LanchesQuantidade = g.Sum(q=> q.Quantidade), 
                                LanchesValorTotal = g.Sum(a => a.Preco * a.Quantidade)
@@ -43,7 +43,7 @@ namespace AppLanches.Areas.Admin.Servicos
                 lanche.LanchesValorTotal = item.LanchesValorTotal;
                 lista.Add(lanche);
             }
-            return (lista);
+            return lista;
         }
     }
 }
