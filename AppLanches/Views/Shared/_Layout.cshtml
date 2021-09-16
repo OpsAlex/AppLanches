@@ -24,7 +24,7 @@
                         <a class="nav-link text-dark" asp-area="Admin" asp-controller="Admin" asp-action="Index">Admin</a>
                     }
                     <form class="navbar-form navbar-right" asp-controller="Lanche" asp-action="Search" method="get">
-                        <div class="form-group">
+                        <div class="form-check">
                             <input type="text" class="form-control" placeholder="Procurar lanche" name="searchString" value="@ViewData["searchString"]">
                         </div>
                     </form>
@@ -47,12 +47,8 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - AppLanches - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    
+    <partial name="_Footer" />
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

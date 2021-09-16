@@ -18,8 +18,8 @@ namespace AppLanches.Components
         }
         public IViewComponentResult Invoke()
         {
-            // var itens = _carrinhoCompra.GetCarrinhoCompraItens();
-            var itens = new List<CarrinhoCompraItem>() { new CarrinhoCompraItem(), new CarrinhoCompraItem() };
+            var itens = _carrinhoCompra.GetCarrinhoCompraItens();
+            // var itens = new List<CarrinhoCompraItem>() { new CarrinhoCompraItem(), new CarrinhoCompraItem() };
             _carrinhoCompra.CarrinhoCompraItens = itens;
 
             var carrinhoCompraVM = new CarrinhoCompraViewModel
